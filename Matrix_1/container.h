@@ -96,7 +96,7 @@ namespace matrix {
 		this->swaps(temp);
 		return *this;
 	}
-
+	
 	template<typename T>
 	bool Container<T>::operator==(const Container<T>& other) const {
 		if (this->_size == other._size) {
@@ -131,6 +131,7 @@ namespace matrix {
 	Container<T>::~Container() {
 		if (this->_arr != nullptr) {
 			delete[] this->_arr;
+			_arr = nullptr;
 		}
 	}
 }

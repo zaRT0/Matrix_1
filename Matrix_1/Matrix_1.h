@@ -20,9 +20,13 @@ namespace matrix {
 
         Matrix(int rows, int cols, T upper_bound, T lower_bound);
 
+        Matrix (const Matrix<T>& matrix);
+
         int get_rows() const;
 
         int get_cols() const;
+
+        Container<T>* get_array();
 
         T operator()(int index_one, int index_two) const;
 
@@ -34,7 +38,7 @@ namespace matrix {
 
         Matrix<T>& operator*(const Matrix<T>& arr);
 
-        Matrix<T> operator*=(const T& value);
+        Matrix<T>& operator*=(const T& value);
 
         Matrix<T>& operator/=(const T& value);
 
@@ -44,6 +48,57 @@ namespace matrix {
 
         ~Matrix();
     };
+
+    template <typename T>
+    Matrix<T>& Matrix<T>::operator*=(const T& value) {
+        for (int i = 0; i < _rows; ++i) {
+            for (int j = 0; j < _cols; ++j) {
+                _array[i][j] *= value;
+            }
+        }
+        return *this;
+    }
+
+    template <typename T>
+    Matrix<T> operator*(const T& value, const Matrix<T> matrix) {
+        Matrix<T> temp(matrix.get_rows(), matrix.get_cols(), T(0));
+        for (int i = 0; i < temp.get_cols(); ++i) {
+            for (int j = 0; j < temp.get_rows(); ++j) {
+                temp(i, j) = value * matrix(i, j);
+            }
+        }
+        return temp;
+    }
+
+    template<typename T>
+    Matrix<T> operator*(const Matrix<T> matrix, const T& value) {
+        Matrix<T> temp(matrix.get_rows(), matrix.get_cols(), T(0));
+        for (int i = 0; i < temp.get_cols(); ++i) {
+            for (int j = 0; j < temp.get_rows(); ++j) {
+                temp(i, j) = value * matrix(i, j);
+            }
+        }
+        return temp;
+    }
+
+    template <typename T>
+    Matrix<T>::Matrix(const Matrix<T>& matrix) {
+        this->_rows = matrix._rows;
+        this->_cols = matrix._cols;
+        this->_array = new Container<T> [_rows];
+        for (int i = 0; i < _rows; ++i) {
+            this->_array[i] = Container<T>(_cols);
+            for (int j = 0; j < _cols; ++j) {
+                this->_array[i][j] = matrix._array[i][j];
+            }
+        }
+    }
+
+    template<typename T>
+    Container<T>* Matrix<T>::get_array() {
+        return _array;
+    }
+
 
     template<typename T>
     ostream& operator <<(ostream& stream, const Matrix<T>& matrix) {
@@ -147,7 +202,7 @@ namespace matrix {
     }
 
     template <typename T>
-    Matrix<T>& Matrix<T>::operator * (const Matrix<T>& arr) {
+    Matrix<T>& Matrix<T>::operator *(const Matrix<T>& arr) {
         if (this->_cols != arr.get_rows()) {
             throw runtime_error("Incompatible matrix sizes for multiplication");
         }
@@ -161,19 +216,6 @@ namespace matrix {
         }
         return *temp;
     }
-
-    template <typename T>
-    Matrix<T> Matrix<T>::operator *= (const T& value) {
-        Matrix<T> result = Matrix<T>(get_rows(), get_cols(), 0);
-        for (int i = 0; i < get_rows(); ++i) {
-            for (int j = 0; j < get_cols(); ++j) {
-                result._array[i][j] *=  value;
-            }
-        }
-        return result;
-    }
-
-
 
     template <typename T>
     Matrix<T>& Matrix<T>::operator /= (const T& value) {
@@ -220,6 +262,7 @@ namespace matrix {
 
     template <typename T>
     Matrix<T>::~Matrix() {
+        cout << "Вызвался деструктор!" << endl;
         delete[] this->_array;
     }
-} 
+}
