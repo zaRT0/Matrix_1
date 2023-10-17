@@ -34,7 +34,7 @@ namespace matrix {
 
         Matrix<T>& operator*(const Matrix<T>& arr);
 
-        Matrix<T>& operator*=(const T& value);
+        Matrix<T> operator*=(const T& value);
 
         Matrix<T>& operator/=(const T& value);
 
@@ -163,14 +163,17 @@ namespace matrix {
     }
 
     template <typename T>
-    Matrix<T>& Matrix<T>::operator *= (const T& value) {
-        for (int i = 0; i < this->_rows; ++i) {
-            for (int j = 0; j < this->_cols; ++j) {
-                this->_array[i][j] *= value;
+    Matrix<T> Matrix<T>::operator *= (const T& value) {
+        Matrix<T> result = Matrix<T>(get_rows(), get_cols(), 0);
+        for (int i = 0; i < get_rows(); ++i) {
+            for (int j = 0; j < get_cols(); ++j) {
+                result._array[i][j] *=  value;
             }
         }
-        return *this;
+        return result;
     }
+
+
 
     template <typename T>
     Matrix<T>& Matrix<T>::operator /= (const T& value) {
@@ -219,4 +222,4 @@ namespace matrix {
     Matrix<T>::~Matrix() {
         delete[] this->_array;
     }
-}
+} 
