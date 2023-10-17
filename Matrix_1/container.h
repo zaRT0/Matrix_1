@@ -10,27 +10,16 @@ namespace matrix {
 		T* _arr;
 	public:
 		Container();
-
 		Container(int size);
-
 		Container(const Container<T>& other);
-
 		int get_size();
-
 		T* get_array();
-
 		T& operator[](int index);
-
 		T operator[](int index) const;
-
 		void swaps(Container<T>& other);
-
 		Container<T>& operator=(const Container<T>& other);
-
 		~Container();
-
 		bool operator==(const Container<T>& other) const;
-
 		bool operator!=(const Container<T>& other) const;
 	};
 

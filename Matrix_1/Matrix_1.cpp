@@ -9,8 +9,7 @@ int main() {
 	Matrix<int> d(3, 3, 2);
 	c *= 2;
 	cout << c;
-	/*auto result = c * 2.0f;*/
-	auto result = c * d;
+	auto result = 2 * c;
 	cout << result;
 	return 0;
 }
